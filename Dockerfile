@@ -24,6 +24,7 @@ RUN set -x; \
             python-pip \
             python-setuptools \
             libev-dev \
+            libblas-dev liblapack-dev libatlas-base-dev gfortran \
      && rm -rf /usr/share/doc /usr/share/man /var/lib/apt/lists/* \
      && pip install --timeout=100 -r requirements.txt --upgrade; \
         sed -i 's#^UTC=.*#UTC=no#g' /etc/default/rcS \
