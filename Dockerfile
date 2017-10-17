@@ -10,6 +10,8 @@ ENV ACCESS_KEY_ID ""
 ENV ACCESS_KEY_SECRET ""
 ENV ODPS_ENDPOINT "http://service.odps.aliyun.com/api"
 
+ENV DAY7_DATA "${FLREC}/data/7day_data"
+
 ADD . ${FLREC}
 #COPY aliyun.sources.list /etc/apt/sources.list
 
@@ -24,7 +26,10 @@ RUN set -x; \
             python-pip \
             python-setuptools \
             libev-dev \
-            libblas-dev liblapack-dev libatlas-base-dev gfortran \
+            libblas-dev \
+            liblapack-dev \
+            libatlas-base-dev \
+            gfortran \
      && rm -rf /usr/share/doc /usr/share/man /var/lib/apt/lists/* \
      && pip install --timeout=100 -r requirements.txt --upgrade; \
         sed -i 's#^UTC=.*#UTC=no#g' /etc/default/rcS \
@@ -32,8 +37,9 @@ RUN set -x; \
      && echo "${TIMEZONE}" > /etc/timezone \
      && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
-#WORKDIR /pywork/scripts/magazine/
+WORKDIR ${FLREC}
 
-#CMD ["/pywork/entrypoint.sh", "/pywork/redboard/home/genHomeCoverImages.py"]
+VOLUME "/flrec/data/"
 
-#ENTRYPOINT ["/pywork/entrypoint.sh"]
+CMD ["python", "examples/flrec.py"]
+
