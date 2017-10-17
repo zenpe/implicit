@@ -28,6 +28,7 @@ RUN set -x; \
      && rm -rf /usr/share/doc /usr/share/man /var/lib/apt/lists/* \
      && pip install --timeout=100 -r requirements.txt --upgrade; \
         sed -i 's#^UTC=.*#UTC=no#g' /etc/default/rcS \
+     && python setup.py install
      && echo "${TIMEZONE}" > /etc/timezone \
      && \cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime
 
