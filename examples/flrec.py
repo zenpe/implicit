@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import os
+
 import logging
 import numpy
 import pandas
@@ -20,6 +22,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 logging.basicConfig(level=logging.DEBUG)
 
 file_path = "/Users/zp/Downloads/7day_data"
+if os.environ.get("DAY7_DATA"):
+    file_path = os.environ.get("DAY7_DATA")
 
 # maps command line model argument to class name
 MODELS = {"als":  AlternatingLeastSquares,
@@ -82,7 +86,8 @@ def read_data(file_path):
     data = pandas.read_csv(file_path,
                 usecols=[1, 3],
                 names=['article', 'user'],
-                na_filter=False)
+                na_filter=False,
+                error_bad_lines=False)
 
     # map each article and user to a unique numeric value
     data['views'] = 1

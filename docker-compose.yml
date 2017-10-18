@@ -1,0 +1,21 @@
+version: "2"
+services:
+  flrec:
+    image: registry.cn-hangzhou.aliyuncs.com/flipboardchina/implicit
+    environment:
+      - FL_ENV=prod
+      - DAY7_DATA=/flrec/data/7day_data
+    volumes:
+      - /mnt/implicit/7day_data:/Users/zp/Downloads/7day_data
+    labels:
+      aliyun.probe.url: http://container:8888/
+      aliyun.probe.timeout_seconds: 8
+      aliyun.probe.initial_delay_seconds: 8
+      aliyun.rolling_updates: 'true'
+      aliyun.scale: '1'
+      aliyun.log_store_stdout: stdout
+      aliyun.proxy.VIRTUAL_HOST: "flrec.live.flipchina.cn,flrec.private"
+    expose:
+      - 8888:8888
+    command: sh -c 'python /flrec/examples/flrec.py'
+    restart: always
