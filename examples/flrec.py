@@ -38,10 +38,22 @@ class ReccomendHandler(BaseHTTPRequestHandler):
     data = None
     user_items = None
 
+    def do_HEAD(self):
+        self.send_response(200, "ok")
+        self.end_headers()
+
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.end_headers()
+
     def validate_param(self):
-        if not self.path.startswith('/recommend'):
-            self.sesend_error(404, "Invalid request.")
-            return
+
+        if self.path.startswith('/health'):
+            self.send_response(200, "ok")
+            return None, None
+        elif not self.path.startswith('/recommend'):
+            self.send_response(404, "Invalid request")
+            return None, None
 
         query_components = parse_qs(urlparse(self.path).query)
         uid = query_components.get("uid", None)
